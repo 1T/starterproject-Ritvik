@@ -1,5 +1,9 @@
 """Core functions."""
 from typing import List
+from OneTicketLogging import elasticsearch_logger
+
+
+_logger = elasticsearch_logger(__name__)
 
 
 class TSVFileProcessor:
@@ -29,7 +33,7 @@ class TSVFileProcessor:
                 # Handle the case when either the 'Quantity' or 'Cost' column
                 # headers are missing.
                 self.rows = []
-                print(e)
+                _logger.exception(e)
         else:
             self.header_row = []
 
@@ -181,8 +185,8 @@ class Row:
             # Calculate the total value for the row
             self.total = self.cost * self.quantity
         except (ValueError, IndexError) as e:
-            print(f'Error in processing row: {e}\n'
-                  f'  Columns: {self.columns}')
+            _logger.error(f'Error in processing row: {e}\n'
+                          f'  Columns: {self.columns}')
             self.total = 0.0
 
         return self.total

@@ -11,97 +11,18 @@ x-amazon-apigateway-request-validators:
     validateRequestBody: true
     validateRequestParameters: true
 paths:
-  /v1/example:
-    get:
-      x-amazon-apigateway-request-validator: all
-      consumes:
-      - "application/json"
-      parameters:
-      - name: exampleparam
-        in: query
-        description: Example Parameter
-        required: true
-        type: string
-      produces:
-      - "application/json"
-      responses:
-        200:
-          description: "200 response"
-          headers:
-            Access-Control-Allow-Origin:
-              type: "string"
-        400:
-          description: "400 response"
-          headers:
-            Access-Control-Allow-Origin:
-              type: "string"
-        500:
-          description: "500 response"
-          headers:
-            Access-Control-Allow-Origin:
-              type: "string"
-        503:
-          description: "503 response"
-          headers:
-            Access-Control-Allow-Origin:
-              type: "string"
-        504:
-          description: "504 response"
-          headers:
-            Access-Control-Allow-Origin:
-              type: "string"
-      security:
-      - api_key: []
-      x-amazon-apigateway-integration:
-        requestTemplates:
-          application/json: |-
-            {
-                "example_param": $input.params('exampleparam')
-            }
-        responses:
-          default:
-            statusCode: "200"
-            responseParameters:
-              method.response.header.Access-Control-Allow-Origin: "'*'"
-          .*timed out.*:
-            statusCode: "504"
-            responseParameters:
-              method.response.header.Access-Control-Allow-Origin: "'*'"
-            responseTemplates:
-              application/json: "{\"message\" : \"Request timed out.\"}"
-          Client error.*:
-            statusCode: "400"
-            responseParameters:
-              method.response.header.Access-Control-Allow-Origin: "'*'"
-            responseTemplates:
-              application/json: "{\"message\" : $input.json('$.errorMessage')}"
-          Service error.*:
-            statusCode: "500"
-            responseParameters:
-              method.response.header.Access-Control-Allow-Origin: "'*'"
-            responseTemplates:
-              application/json: "{\"message\" : $input.json('$.errorMessage')}"
-          Process exited.*:
-            statusCode: "503"
-            responseParameters:
-              method.response.header.Access-Control-Allow-Origin: "'*'"
-            responseTemplates:
-              application/json: "{\"message\" : $input.json('$.errorMessage')}"
-        uri: arn:aws:apigateway:<<region>>:lambda:path/2015-03-31/functions/arn:aws:lambda:<<region>>:<<accountId>>:function:${stageVariables.ExampleGetFunctionName}/invocations
-        passthroughBehavior: "when_no_templates"
-        httpMethod: "POST"
-        type: "aws"
+  /v1:
     post:
       x-amazon-apigateway-request-validator: all
       consumes:
       - "application/json"
       parameters:
-        - in: body
-          name: examplebody
-          description: Example Body
-          required: true
-          schema:
-            $ref: '#/definitions/ExampleBody'
+      - name: url-file-body
+        in: body
+        description: URL contains TSV file Body
+        required: true
+        schema:
+          $ref: '#/definitions/URLFileBody'
       produces:
       - "application/json"
       responses:
@@ -162,7 +83,7 @@ paths:
               method.response.header.Access-Control-Allow-Origin: "'*'"
             responseTemplates:
               application/json: "{\"message\" : $input.json('$.errorMessage')}"
-        uri: arn:aws:apigateway:<<region>>:lambda:path/2015-03-31/functions/arn:aws:lambda:<<region>>:<<accountId>>:function:${stageVariables.ExamplePostFunctionName}/invocations
+        uri: arn:aws:apigateway:<<region>>:lambda:path/2015-03-31/functions/arn:aws:lambda:<<region>>:<<accountId>>:function:${stageVariables.PostFunctionName}/invocations
         passthroughBehavior: "when_no_templates"
         httpMethod: "POST"
         type: "aws"
@@ -188,7 +109,7 @@ paths:
           default:
             statusCode: "200"
             responseParameters:
-              method.response.header.Access-Control-Allow-Methods: "'POST,GET,OPTIONS'"
+              method.response.header.Access-Control-Allow-Methods: "'POST,OPTIONS'"
               method.response.header.Access-Control-Allow-Headers: "'Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token'"
               method.response.header.Access-Control-Allow-Origin: "'*'"
         requestTemplates:
@@ -201,13 +122,11 @@ securityDefinitions:
     name: "x-api-key"
     in: "header"
 definitions:
-  ExampleBody:
+  URLFileBody:
     type: object
-    title: "Example Body"
+    title: "URL contains TSV file Body"
     required:
-      - example_required_key
+      - url
     properties:
-      example_required_key:
-        type: string
-      example_non_required_key:
+      url:
         type: string

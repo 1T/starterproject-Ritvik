@@ -1,5 +1,5 @@
 tests = tests
-package = projectbase
+package = starterproject
 
 check:
 	# No unused imports, no undefined vars,

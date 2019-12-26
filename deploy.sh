@@ -2,7 +2,7 @@
 set -e
 command -v aws >/dev/null 2>&1 || { echo "First, install the AWS CLI: python -m pip install --upgrade awscli." >&2; exit 1; }
 
-app=starterproject-Ritvik
+app=starterproject
 
 user=$(aws iam get-user --output text --query 'User.UserName')
 aws_region=us-east-1

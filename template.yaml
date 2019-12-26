@@ -1,5 +1,5 @@
 AWSTemplateFormatVersion: '2010-09-09'
-Description: starterproject-Ritvik microservice.
+Description: Starter project microservice to read in in TSV Url and calculate the total value.
 
 Parameters:
   ServiceName:
@@ -87,32 +87,32 @@ Resources:
     Properties:
       RestApiId: !Ref Api
       DeploymentId: !Ref ApiDeployment
+      Description: prod stage
       StageName: prod
       Variables:
         ApiRoleName: !Ref ApiRole
-        ExampleGetFunctionName: !Ref ExampleGetFunction
-        ExamplePostFunctionName: !Ref ExamplePostFunction
+        PostFunctionName: !Ref PostFunction
 
-  ApiExampleGetFunctionInvokePermission:
+#  ApiExampleGetFunctionInvokePermission:
+#    Type: AWS::Lambda::Permission
+#    Properties:
+#      FunctionName: !GetAtt ExampleGetFunction.Arn
+#      Action: lambda:InvokeFunction
+#      Principal: apigateway.amazonaws.com
+#      SourceArn: !Join
+#        - ''
+#        - - 'arn:aws:execute-api:'
+#          - !Ref AWS::Region
+#          - ":"
+#          - !Ref AWS::AccountId
+#          - ":"
+#          - !Ref Api
+#          - "/*/*"
+
+  ApiPostFunctionInvokePermission:
     Type: AWS::Lambda::Permission
     Properties:
-      FunctionName: !GetAtt ExampleGetFunction.Arn
-      Action: lambda:InvokeFunction
-      Principal: apigateway.amazonaws.com
-      SourceArn: !Join
-        - ''
-        - - 'arn:aws:execute-api:'
-          - !Ref AWS::Region
-          - ":"
-          - !Ref AWS::AccountId
-          - ":"
-          - !Ref Api
-          - "/*/*"
-
-  ApiExamplePostFunctionInvokePermission:
-    Type: AWS::Lambda::Permission
-    Properties:
-      FunctionName: !GetAtt ExamplePostFunction.Arn
+      FunctionName: !GetAtt PostFunction.Arn
       Action: lambda:InvokeFunction
       Principal: apigateway.amazonaws.com
       SourceArn: !Join
@@ -129,32 +129,32 @@ Resources:
   ##########################################################################################
   # Example Get Function -- Handles the example GET request.
   ##########################################################################################
-  ExampleGetFunction:
-    Type: AWS::Lambda::Function
-    Properties:
-      Role: !GetAtt starterprojectBaseRole.Arn
-      Handler: starterproject-Ritvik.handlers.example_get
-      Runtime: python3.6
-      Code:
-        S3Bucket: !Ref CodeBucketName
-        S3Key: !Ref CodeKey
-      MemorySize: 128
-      Timeout: 300
-      Environment:
-        Variables:
-          APP_NAME: !Ref ServiceName
-          ENV_TYPE: !Ref EnvironmentType
+#  ExampleGetFunction:
+#    Type: AWS::Lambda::Function
+#    Properties:
+#      Role: !GetAtt starterprojectBaseRole.Arn
+#      Handler: starterproject-Ritvik.handlers.example_get
+#      Runtime: python3.6
+#      Code:
+#        S3Bucket: !Ref CodeBucketName
+#        S3Key: !Ref CodeKey
+#      MemorySize: 128
+#      Timeout: 300
+#      Environment:
+#        Variables:
+#          APP_NAME: !Ref ServiceName
+#          ENV_TYPE: !Ref EnvironmentType
 
 
   ##########################################################################################
   # Example Post Function -- Handles the example POST request.
   ##########################################################################################
-  ExamplePostFunction:
+  PostFunction:
     Type: AWS::Lambda::Function
     Properties:
       Role: !GetAtt starterprojectBaseRole.Arn
-      Handler: starterproject-Ritvik.handlers.example_post
-      Runtime: python3.6
+      Handler: starterproject.handlers.calc_total_value_post
+      Runtime: python3.7
       Code:
         S3Bucket: !Ref CodeBucketName
         S3Key: !Ref CodeKey
