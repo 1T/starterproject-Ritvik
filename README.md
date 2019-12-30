@@ -20,7 +20,7 @@ curl -X POST 'https://{api}.execute-api.us-east-1.amazonaws.com/prod/v1' -H 'x-a
 ### Actual
 > The following is a live invocation that should return a successful response.
 ```
-curl -X POST 'https://2msxgbd0l2.execute-api.us-east-1.amazonaws.com/prod/v1' \
+curl -X POST 'https://cipkjz5li9.execute-api.us-east-1.amazonaws.com/prod/v1' \
   -H 'x-api-key: my-really-long-api-key' \
   -H 'Content-Type: application/json' \
   -d '{"url": "https://etix-pdf-dev.s3.amazonaws.com/9147_10832__0-10-5_7-5-2019.txt"}'
